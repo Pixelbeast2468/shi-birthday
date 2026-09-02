@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Happy Birthday, Shi ♡</title>
+
+    <link rel="stylesheet" href="you_got_style.css">
+
+    <style>
+
+        .password-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            box-sizing: border-box;
+
+            background-color: #5a4036;
+
+            background-image:
+                radial-gradient(
+                    rgba(255,255,255,.035) 1px,
+                    transparent 1px
+                ),
+                radial-gradient(
+                    rgba(25,15,10,.065) 1px,
+                    transparent 1px
+                ),
+                radial-gradient(
+                    ellipse at 25% 35%,
+                    rgba(255,255,255,.045),
+                    transparent 45%
+                ),
+                radial-gradient(
+                    ellipse at 75% 65%,
+                    rgba(25,15,10,.06),
+                    transparent 50%
+                );
+
+            background-size:
+                4px 4px,
+                7px 7px,
+                100% 100%,
+                100% 100%;
+
+            transition:
+                opacity .5s ease,
+                visibility .5s ease;
+        }
+
+        .password-gate.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .password-paper {
+            position: relative;
+            width: min(520px, 92vw);
+            padding: 60px 45px 50px;
+            box-sizing: border-box;
+            text-align: center;
+
+            background-color: #eee1cb;
+
+            background-image:
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent 0,
+                    transparent 31px,
+                    rgba(90,90,90,.08) 32px,
+                    transparent 33px
+                ),
+                radial-gradient(
+                    rgba(80,60,40,.035) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                auto,
+                5px 5px;
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.35);
+
+            transform: rotate(-1deg);
+
+            animation:
+                passwordPaperAppear .8s ease;
+        }
+
+        .password-paper.shake {
+            animation: passwordShake .45s ease;
+        }
+
+        .password-paper::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 50%;
+
+            width: 115px;
+            height: 18px;
+
+            transform:
+                translateX(-50%)
+                rotate(-2deg);
+
+            background:
+                rgba(255,247,225,.6);
+        }
+
+        .password-title {
+            margin: 0 0 12px;
+
+            font-family: "Segoe Print", cursive;
+            font-size: 34px;
+            color: #102A43;
+        }
+
+        .password-subtitle {
+            margin: 0 auto 28px;
+
+            max-width: 360px;
+
+            font-family: "Segoe Print", cursive;
+            font-size: 17px;
+            line-height: 1.6;
+            color: #493b33;
+        }
+
+        .password-little-note {
+            margin: 0 0 25px;
+
+            font-family: "Segoe Print", cursive;
+            font-size: 13px;
+            color: #6b5a4e;
+
+            opacity: .75;
+
+            transform: rotate(-2deg);
+        }
+
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .password-input {
+            width: min(300px, 80vw);
+
+            padding: 12px 18px;
+            box-sizing: border-box;
+
+            border: 2px solid #102A43;
+            border-radius: 25px;
+
+            outline: none;
+
+            background: rgba(255,255,255,.4);
+            color: #102A43;
+
+            font-family: "Segoe Print", cursive;
+            font-size: 16px;
+            text-align: center;
+
+            transition:
+                background-color .25s ease,
+                box-shadow .25s ease,
+                transform .25s ease;
+        }
+
+        .password-input:focus {
+            background: rgba(255,255,255,.65);
+
+            box-shadow:
+                0 5px 12px rgba(16,42,67,.12);
+
+            transform: translateY(-2px);
+        }
+
+        .password-input::placeholder {
+            color: #75675d;
+            opacity: .7;
+        }
+
+        .password-button {
+            margin-top: 16px;
+
+            padding: 11px 28px;
+
+            border: 2px solid #102A43;
+            border-radius: 25px;
+
+            background: rgba(255,255,255,.3);
+            color: #102A43;
+
+            font-family: "Segoe Print", cursive;
+            font-size: 16px;
+
+            cursor: pointer;
+
+            transition:
+                transform .25s ease,
+                background-color .25s ease,
+                color .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .password-button:hover {
+            background: #102A43;
+            color: #eee1cb;
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 7px 14px rgba(16,42,67,.2);
+        }
+
+        .password-button:active {
+            transform: translateY(3px);
+        }
+
+        .password-error {
+            min-height: 22px;
+
+            margin: 13px 0 0;
+
+            font-family: "Segoe Print", cursive;
+            font-size: 13px;
+
+            color: #8b5149;
+
+            opacity: 0;
+
+            transition:
+                opacity .2s ease;
+        }
+
+        .password-error.show {
+            opacity: 1;
+        }
+
+        @keyframes passwordPaperAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    rotate(-1deg)
+                    translateY(20px)
+                    scale(.96);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    rotate(-1deg)
+                    translateY(0)
+                    scale(1);
+            }
+
+        }
+
+        @keyframes passwordShake {
+
+            0% {
+                transform: rotate(-1deg) translateX(0);
+            }
+
+            15% {
+                transform: rotate(-1deg) translateX(-10px);
+            }
+
+            30% {
+                transform: rotate(-1deg) translateX(9px);
+            }
+
+            45% {
+                transform: rotate(-1deg) translateX(-7px);
+            }
+
+            60% {
+                transform: rotate(-1deg) translateX(6px);
+            }
+
+            75% {
+                transform: rotate(-1deg) translateX(-3px);
+            }
+
+            100% {
+                transform: rotate(-1deg) translateX(0);
+            }
+
+        }
+
+        @media (max-width: 768px) {
+
+            .password-paper {
+                padding:
+                    55px
+                    25px
+                    40px;
+            }
+
+            .password-title {
+                font-size: 28px;
+            }
+
+            .password-subtitle {
+                font-size: 15px;
+            }
+
+            .password-input {
+                font-size: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div
+        class="password-gate"
+        id="passwordGate"
+    >
+
+        <div
+            class="password-paper"
+            id="passwordPaper"
+        >
+
+            <h1 class="password-title">
+                ♡ for my girl ♡
+            </h1>
+
+            <p class="password-subtitle">
+                this little place is just for you
+            </p>
+
+            <p class="password-little-note">
+                a tiny birthday surprise from your maddy &lt;3
+            </p>
+
+            <form
+                class="password-form"
+                onsubmit="unlockBirthdaySite(event)"
+            >
+
+                <input
+                    type="password"
+                    id="birthdayPassword"
+                    class="password-input"
+                    placeholder="your secret..."
+                    autocomplete="off"
+                    aria-label="Birthday website password"
+                >
+
+                <button
+                    type="submit"
+                    class="password-button"
+                >
+                    open ♡
+                </button>
+
+                <p
+                    class="password-error"
+                    id="passwordError"
+                >
+                    hmmmm... thats not it hehe
+                </p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <main class="notebook">
+
+        <header class="notebook-header">
+
+            <h1>
+                Happy Birthday, Shi ♡
+            </h1>
+
+            <div class="notebook-signature">
+                M + S
+            </div>
+
+        </header>
+
+
+        <section class="notebook-paper homepage-paper">
+
+            <section class="polaroid-scene">
+
+                <img
+                    class="memory-photo photo-10"
+                    src="polaroids/polaroid 10.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-11"
+                    src="polaroids/polaroid 11.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-1"
+                    src="polaroids/polaroid 1.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-2"
+                    src="polaroids/polaroid 2.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-3"
+                    src="polaroids/polaroid 3.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-4"
+                    src="polaroids/polaroid 4.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-5"
+                    src="polaroids/polaroid 5.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-6"
+                    src="polaroids/polaroid 6.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-7"
+                    src="polaroids/polaroid 7.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-8"
+                    src="polaroids/polaroid 8.png"
+                    alt="A memory of us"
+                >
+
+                <img
+                    class="memory-photo photo-9"
+                    src="polaroids/polaroid 9.png"
+                    alt="A memory of us"
+                >
+
+            </section>
+
+
+            <section class="birthday-content">
+
+                <a
+                    href="our_memories.html"
+                    class="memories-button"
+                >
+                    ♡ Our Memories ♡
+                </a>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <div
+        class="birthday-secret-overlay"
+        id="birthdaySecretOverlay"
+        aria-hidden="true"
+    >
+
+        <div class="birthday-letter">
+
+            <button
+                class="birthday-secret-close"
+                type="button"
+                onclick="closeBirthdayMessage()"
+                aria-label="Close birthday message"
+            >
+                ×
+            </button>
+
+            <img
+                class="secret-birthday-photo"
+                src="images/secret_birthday.jpg"
+                alt="A special memory of us"
+            >
+
+            <div class="birthday-letter-content">
+
+                <h2>
+                    happy birthday honeyyyyy ♡
+                </h2>
+
+                <div class="birthday-message">
+
+                    <p>
+                        to my dearly beloved, Shianne
+                    </p>
+
+                    <p>
+                        i really dont know how to start this without turning into a 6 hour yap session or without crying and making a fuck ton of typo's, so guess you might have to deal with both XD, i have been thinking about how much you have changed my life since you came into it, and to be honest, i dont think that i would have ever known just how much happiness one person could bring to someone else's life until i met you.
+                    </p>
+
+                    <p>
+                        there are many tiny things about us that i adore and cherish, from the stupid jokes, to all the random convo's that end up turning into us yapping for hours on end, i love the games that we play together from those late night uno games where you would dominate every round cause you a boss frfr, to the big gaming sessions on valorant and minecraft where we dont even have to have deep conversations where we can just sit together spouting whatever random thing that comes to our mind and laugh like drunk idiots XD, your adorable little laughs that make my heart feel so warm and cozy, the silly little memories we share and even the moments where nothing is happening at all, and every single one my heart soul and mind cherish so dearly and hold so close to my heart. even though some of those moments are like dead quiet i honestly love them still, just knowing that i get to sit there with my girl and exist in the same moment as her, i dont need anything crazy or exciting to happen i dont need an adventure or to have the perfect day everyday, most the time all i want is you. and honestly i think thats one of the things that i love the most about you faefae, you make even the smallest most tiny incy wincy moments feel like they are worth remembering.
+                    </p>
+
+                    <p>
+                        i wish i could take every little memory we have made and will make and stuff it into this tiny website. every giggle, every laugh, every silly conversation, every photo, every hug, kiss, "i love you", tear. every single moment we spend i wish i could have here to show you just how many of these moments we have shared, how many of them have meant the absolute world to me, how every one of these little moments that everyone wouldnt even know happened, some that i dont even realise until later when i look back, makes me fall in love with my girl all over again,
+                    </p>
+
+                    <p>
+                        to be honest when i look at these photos of us, i dont just see a bunch of pictures...
+                        i see us. i see the girl who makes me laugh until my stomach aches. i see the girl that i can talk to about literally anything imaginable. i see the girl who somehow always finds a way to make me feel happier by just being herself, who makes me feel happy enough to be myself. and i see the person that i am so fucking lucky to call my girlfriend. and i hope you know just how proud i am of you, Shi. not just because its your birthday nor the fact your now 20, but because of you faefae, im proud of the person you are, and everything that makes you, you. you go out of your way to help anyone in need, you have a golden heart my love, and thanks to you my heart was opened up too, you gave me so much to be thankfull for and yet still act like you dont deserve the world, but honestly you deserve more than the world you deserve every little grain of sand every little ounce of mas on every planet, every star, everything in the universe and that doesnt even begin to cover how much debt this world should owe towards such an amazing girl.
+                    </p>
+
+                    <p>
+                        you deserve so much happiness, to feel loved, appreciated, cherished and reminded of just how fucking amazing you are, and if i can give you even a tiny part of that happiness daily then i'll be happy cause you deserve so much my love, and i swear on every single person in my life that i will always strive to give you everything i can. i know that this website isnt some massive grand gesture of my love nor is it perfect but every little part of it was made because i want to give you something that was ours, those little memories we share, something you could look through to and smile at. someting that reminds you of us, something that even if you come back to years from now might make you think "yeahhh... that was me and maddy". and to be honest that is all i really want, i want to keep making these memories with you, make more stupid photos, more games together, more laughs, more days where i get to say thats my girl, more us. so again, happy birthday to my beautiful girl. i hope your 20th year will be filled with joy and great health, and i hope i get to be there beside you for as much of it as i possibly can and hopefully i can make more visits to you than i have done this year.
+                    </p>
+
+                    <p>
+                        i love you more than i think i will ever be able to properly explain.
+                    </p>
+
+                    <p>
+                        i love you, Mo Chuisle.
+                    </p>
+
+                </div>
+
+                <p class="birthday-signoff">
+                    - your maddy &lt;3
+                </p>
+
+                <button
+                    class="love-you-button"
+                    type="button"
+                    onclick="closeBirthdayMessage()"
+                >
+                    i love you ♥
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const PASSWORD = "cutie";
+
+        const passwordGate =
+            document.getElementById("passwordGate");
+
+        const passwordPaper =
+            document.getElementById("passwordPaper");
+
+        const passwordInput =
+            document.getElementById("birthdayPassword");
+
+        const passwordError =
+            document.getElementById("passwordError");
+
+
+        function unlockBirthdaySite(event) {
+
+            event.preventDefault();
+
+            const enteredPassword =
+                passwordInput.value;
+
+            if (enteredPassword === PASSWORD) {
+
+                passwordError.classList.remove("show");
+
+                passwordGate.classList.add("hidden");
+
+                passwordInput.blur();
+
+            } else {
+
+                passwordError.classList.add("show");
+
+                passwordPaper.classList.remove("shake");
+
+                void passwordPaper.offsetWidth;
+
+                passwordPaper.classList.add("shake");
+
+                passwordInput.value = "";
+
+                passwordInput.focus();
+
+            }
+
+        }
+
+
+        const birthdaySecretOverlay =
+            document.getElementById(
+                "birthdaySecretOverlay"
+            );
+
+
+        function checkBirthdayUnlock() {
+
+            const unlocked =
+                localStorage.getItem(
+                    "birthdayMessageUnlocked"
+                );
+
+            if (unlocked === "true") {
+
+                birthdaySecretOverlay.classList.add(
+                    "active"
+                );
+
+                birthdaySecretOverlay.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
+
+            }
+
+        }
+
+
+        function closeBirthdayMessage() {
+
+            birthdaySecretOverlay.classList.remove(
+                "active"
+            );
+
+            birthdaySecretOverlay.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+            localStorage.removeItem(
+                "birthdayMessageUnlocked"
+            );
+
+        }
+
+
+        birthdaySecretOverlay.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    birthdaySecretOverlay
+                ) {
+
+                    closeBirthdayMessage();
+
+                }
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (event.key === "Escape") {
+
+                    closeBirthdayMessage();
+
+                }
+
+            }
+        );
+
+
+        checkBirthdayUnlock();
+
+    </script>
+
+</body>
+
+</html>
